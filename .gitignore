@@ -1,0 +1,18 @@
+# bundle original do Claude Design, nao faz parte do site
+_handoff/
+
+# vercel
+.vercel/
+
+# config local do preview
+.claude/
+
+# sistema operacional
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# editores
+.vscode/
+.idea/
+*.swp

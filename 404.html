@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>404 | Kauê Prata</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0A0A0B">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body class="notfound">
+<main>
+  <p class="kicker">// 404</p>
+  <h1>404</h1>
+  <p class="notfound-line" data-i18n="line">This page does not exist.</p>
+  <a class="notfound-back" href="/" data-i18n="back">← back to the homepage</a>
+</main>
+
+<script>
+// segue a mesma preferencia das outras paginas, sem redirecionar ninguem
+(() => {
+  'use strict';
+  const PT = { line: "Esta página não existe.", back: "← voltar para a home" };
+  let saved = null;
+  try { saved = localStorage.getItem('kp-lang'); } catch (e) {}
+  const pt = saved ? saved === 'pt' : (navigator.language || 'en').toLowerCase().startsWith('pt');
+  if (!pt) return;
+  document.documentElement.lang = 'pt-BR';
+  document.querySelector('[data-i18n="back"]').href = '/pt/';
+  document.querySelectorAll('[data-i18n]').forEach((n) => { n.textContent = PT[n.dataset.i18n]; });
+})();
+</script>
+</body>
+</html>
