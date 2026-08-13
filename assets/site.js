@@ -40,6 +40,7 @@
 
   // cena 3d do hero: grid de particulas
   let built = false;
+  let semWebgl = false;
   let raf = 0;
   let waitTimer = 0;
   let tries = 0;
@@ -54,9 +55,17 @@
   const buildScene = (host) => {
     const THREE = window.THREE;
     const w = host.clientWidth, h = host.clientHeight;
+
+    // gpu na blocklist do chrome, driver velho ou aceleracao por hardware
+    // desligada: o construtor estoura. a pagina segue sem a cena, sem insistir
+    try {
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    } catch (e) {
+      semWebgl = true;
+      return;
+    }
     built = true;
 
-    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.setSize(w, h);
     host.appendChild(renderer.domElement);
@@ -149,7 +158,7 @@
   // so roda em tela grande e sem prefers-reduced-motion. o gate volta a ser
   // testado no resize porque no primeiro frame a viewport pode vir com 0 de largura
   const init3D = () => {
-    if (built) return;
+    if (built || semWebgl) return;
     if (window.innerWidth < 768) return;
     if (calmo.matches) return;
     const host = document.getElementById('hero-canvas');
