@@ -19,8 +19,8 @@ Abrir `http://localhost:8123`. Editar o arquivo e recarregar.
 index.html       a página em inglês
 pt/index.html    a página em português
 404.html         página de erro, no mesmo desenho
-assets/v4/site.css  estilo versionado, compartilhado pelas três
-assets/v4/site.js   reveal no scroll e cenas opcionais do hero
+assets/v5/site.css  estilo versionado, compartilhado pelas três
+assets/v5/site.js   reveal no scroll e cenas opcionais do hero
 assets/v2/fonts/    fontes locais, sem bloqueio por CDN
 assets/          foto, card de Open Graph e ícones
 vercel.json      headers de segurança e cache
