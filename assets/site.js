@@ -52,9 +52,12 @@
   let onVisibility = null;
   let heroIO = null;
 
-  const buildScene = (host) => {
+  // estatico: desenha um quadro so e para. e o que roda com
+  // prefers-reduced-motion, que pede menos movimento e nao menos conteudo
+  const buildScene = (host, estatico) => {
     const THREE = window.THREE;
     const w = host.clientWidth, h = host.clientHeight;
+    const pequeno = window.innerWidth < 768;
 
     // gpu na blocklist do chrome, driver velho ou aceleracao por hardware
     // desligada: o construtor estoura. a pagina segue sem a cena, sem insistir
@@ -66,7 +69,7 @@
     }
     built = true;
 
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, pequeno ? 1.25 : 1.5));
     renderer.setSize(w, h);
     host.appendChild(renderer.domElement);
 
@@ -74,7 +77,9 @@
     const camera = new THREE.PerspectiveCamera(55, w / h, 0.1, 100);
     camera.position.set(0, 1.4, 6);
 
-    const N = 90, S = 20, pos = new Float32Array(N * N * 3);
+    // no celular o grid cai pra 48x48, um quarto dos pontos. a area coberta
+    // continua a mesma, entao a malha so fica mais esparsa
+    const N = pequeno ? 48 : 90, S = 20, pos = new Float32Array(N * N * 3);
     let k = 0;
     for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
       pos[k++] = (i / (N - 1) - 0.5) * S; pos[k++] = 0; pos[k++] = (j / (N - 1) - 0.5) * S;
@@ -103,14 +108,25 @@
 
     let mx = 0, my = 0, tx = 0, ty = 0;
 
-    onMove = (e) => { tx = e.clientX / window.innerWidth - 0.5; ty = e.clientY / window.innerHeight - 0.5; };
-    window.addEventListener('mousemove', onMove);
+    const desenhaUm = () => {
+      camera.lookAt(0, -0.6, 0);
+      renderer.render(scene, camera);
+    };
 
     onResize = () => {
       const w2 = host.clientWidth, h2 = host.clientHeight;
       camera.aspect = w2 / h2; camera.updateProjectionMatrix(); renderer.setSize(w2, h2);
+      if (estatico) desenhaUm();
     };
     window.addEventListener('resize', onResize);
+
+    if (estatico) {
+      desenhaUm();
+      return; // sem raf, sem parallax, sem nada pra pausar depois
+    }
+
+    onMove = (e) => { tx = e.clientX / window.innerWidth - 0.5; ty = e.clientY / window.innerHeight - 0.5; };
+    window.addEventListener('mousemove', onMove);
 
     const clock = new THREE.Clock();
     let t = 0;
@@ -155,16 +171,14 @@
 
   const calmo = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  // so roda em tela grande e sem prefers-reduced-motion. o gate volta a ser
-  // testado no resize porque no primeiro frame a viewport pode vir com 0 de largura
+  // o gate volta a ser testado no resize porque no primeiro frame a viewport
+  // pode vir com 0 de largura, e a cena precisa de tamanho pra montar
   const init3D = () => {
     if (built || semWebgl) return;
-    if (window.innerWidth < 768) return;
-    if (calmo.matches) return;
     const host = document.getElementById('hero-canvas');
     if (!host) return;
     if (window.THREE && host.clientWidth && host.clientHeight) {
-      buildScene(host);
+      buildScene(host, calmo.matches);
       return;
     }
     if (tries++ < 50) {
@@ -173,10 +187,11 @@
     }
   };
 
+  // tambem serve pra reconstruir a cena noutro modo, entao o listener que
+  // chama o init3D fica de fora: sem ele nao haveria como remontar depois
   const teardown3D = () => {
     if (waitTimer) clearTimeout(waitTimer);
     if (raf) cancelAnimationFrame(raf);
-    window.removeEventListener('resize', init3D);
     if (onMove) window.removeEventListener('mousemove', onMove);
     if (onResize) window.removeEventListener('resize', onResize);
     if (onVisibility) document.removeEventListener('visibilitychange', onVisibility);
@@ -186,14 +201,16 @@
       renderer.dispose(); geo.dispose(); mat.dispose();
     }
     built = false; raf = 0; tries = 0; renderer = null;
+    onMove = null; onResize = null; onVisibility = null; heroIO = null;
   };
 
   initReveal();
   init3D();
   window.addEventListener('resize', init3D);
 
-  // o css ja obedece a media query sozinho; aqui a cena precisa ser avisada
-  calmo.addEventListener('change', () => { if (calmo.matches) teardown3D(); else init3D(); });
+  // o css ja obedece a media query sozinho; aqui a cena precisa ser remontada
+  // no outro modo: animada, ou um quadro parado
+  calmo.addEventListener('change', () => { teardown3D(); init3D(); });
 
   // pagehide tambem dispara ao entrar no bfcache, entao voltar pelo botao
   // voltar devolvia um hero morto. o pageshow remonta a cena
