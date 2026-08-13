@@ -22,16 +22,18 @@
 
 /* variaveis */
 :root{
-  --bg:#0A0A0B;
-  --fg:#E8E8E6;
+  --bg:#0F1012;
+  --surface:#141619;
+  --surface-raised:#181A1E;
+  --fg:#ECECE9;
   --accent:#1EC8E0;
-  --body:#D4D4D0;
-  --soft:#B8B8B4;
-  --muted:#8A8A8E;
-  --dim:#7B7B7F;
-  --sep:#3A3A3E;
-  --line:#1E1E21;
-  --line-strong:#2A2A2E;
+  --body:#D8D8D4;
+  --soft:#C0C0BC;
+  --muted:#96969A;
+  --dim:#85858A;
+  --sep:#45474D;
+  --line:#292B30;
+  --line-strong:#363940;
   --ease:cubic-bezier(.4,0,.2,1);
   --sans:'Space Grotesk',sans-serif;
   --mono:'JetBrains Mono',monospace;
@@ -98,7 +100,7 @@ a:hover{color:var(--accent)}
   position:fixed;top:0;left:0;right:0;z-index:20;
   display:flex;justify-content:space-between;align-items:center;
   padding:20px 32px;
-  background:linear-gradient(#0A0A0B 40%,rgba(10,10,11,0));
+  background:linear-gradient(#0F1012 40%,rgba(15,16,18,0));
 }
 .brand{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.08em}
 .topnav{display:flex;align-items:center;gap:24px}
@@ -202,7 +204,7 @@ a.lang-btn:hover{color:var(--fg)}
 .projects{display:grid;grid-template-columns:1fr;gap:28px}
 .case{
   border:1px solid var(--line);border-radius:6px;padding:34px;
-  background:rgba(255,255,255,.006);
+  background:var(--surface);
 }
 .case-index{
   display:flex;justify-content:space-between;gap:16px;margin-bottom:46px;
@@ -224,7 +226,7 @@ a.lang-btn:hover{color:var(--fg)}
   margin:0 0 30px;background:var(--line);
   border:1px solid var(--line);border-radius:5px;overflow:hidden;
 }
-.case-fact{padding:16px;background:var(--bg)}
+.case-fact{padding:16px;background:var(--surface-raised)}
 .case-fact dt{
   margin:0 0 8px;color:var(--dim);font-family:var(--mono);
   font-size:10px;letter-spacing:.1em;text-transform:uppercase;
@@ -271,7 +273,7 @@ a.lang-btn:hover{color:var(--fg)}
 /* 04 laboratorio */
 .lab-panel{
   position:relative;overflow:hidden;border:1px solid var(--line);border-radius:6px;
-  padding:38px;background:rgba(255,255,255,.006);
+  padding:38px;background:var(--surface);
 }
 .lab-panel::after{
   content:'';position:absolute;width:300px;height:300px;right:-130px;top:-160px;
