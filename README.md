@@ -19,8 +19,8 @@ Abrir `http://localhost:8123`. Editar o arquivo e recarregar.
 index.html       a página em inglês
 pt/index.html    a página em português
 404.html         página de erro, no mesmo desenho
-assets/v3/site.css  estilo versionado, compartilhado pelas três
-assets/v3/site.js   reveal no scroll e cena opcional do hero
+assets/v4/site.css  estilo versionado, compartilhado pelas três
+assets/v4/site.js   reveal no scroll e cenas opcionais do hero
 assets/v2/fonts/    fontes locais, sem bloqueio por CDN
 assets/          foto, card de Open Graph e ícones
 vercel.json      headers de segurança e cache
@@ -57,8 +57,9 @@ feita no botão fica no `localStorage` e passa a ter prioridade.
 
 **A cena 3D é opcional por design.** Three.js só é baixado em telas a partir
 de 768px e quando `prefers-reduced-motion` não está ligado. Nos outros casos,
-o CSS desenha um campo estático de pontos. No desktop, a malha reage ao cursor,
-recebe pulsos de dados e recua durante o scroll. A animação pausa quando a aba
+o CSS desenha o campo de pontos. No desktop, a malha reage ao cursor, recebe
+pulsos de dados e recua durante o scroll. No celular, um Canvas 2D adiciona
+apenas um sinal leve sobre o campo estático. As animações pausam quando a aba
 perde o foco ou o topo sai da tela.
 
 **Dependência condicional por CDN.** Apenas Three.js r128 vem do cdnjs, com
