@@ -19,8 +19,9 @@ Abrir `http://localhost:8123`. Editar o arquivo e recarregar.
 index.html       a página em inglês
 pt/index.html    a página em português
 404.html         página de erro, no mesmo desenho
-assets/site.css  estilo, compartilhado pelas três
-assets/site.js   reveal no scroll e cena do hero
+assets/v2/site.css  estilo versionado, compartilhado pelas três
+assets/v2/site.js   reveal no scroll e cena opcional do hero
+assets/v2/fonts/    fontes locais, sem bloqueio por CDN
 assets/          foto, card de Open Graph e ícones
 vercel.json      headers de segurança e cache
 tools/           gerador dos assets
@@ -54,14 +55,14 @@ idioma do navegador. `/pt/` nunca redireciona, senão um link em português
 não abriria em português para quem tem o navegador em inglês. A escolha
 feita no botão fica no `localStorage` e passa a ter prioridade.
 
-**A cena 3D é opcional por design.** O grid de partículas do topo não
-inicializa abaixo de 768px de largura nem com `prefers-reduced-motion`
-ligado, e pausa o `requestAnimationFrame` quando a aba perde o foco ou o
-topo sai da tela. A onda é separável, então são 180 senos por frame em vez
-de 16.200 para os 8.100 pontos.
+**A cena 3D é opcional por design.** Three.js só é baixado em telas a partir
+de 768px e quando `prefers-reduced-motion` não está ligado. Nos outros casos,
+o CSS desenha um campo estático de pontos. A animação pausa quando a aba perde
+o foco ou o topo sai da tela.
 
-**Dependências por CDN.** Three.js r128 pelo cdnjs, com `integrity`, e as
-duas fontes pelo Google Fonts.
+**Dependência condicional por CDN.** Apenas Three.js r128 vem do cdnjs, com
+`integrity`, e só quando a cena animada pode ser usada. As fontes são servidas
+localmente em WOFF2.
 
 ## Licença
 

@@ -18,7 +18,7 @@
 <meta property="og:url" content="https://kaueprata.com/pt/">
 <meta property="og:title" content="Kauê Prata | Desenvolvedor Backend e Dados">
 <meta property="og:description" content="Desenvolvedor backend e de dados em São Paulo. Python, FastAPI, C e Lua. Estudante de Data Science &amp; IA no IBMEC, construindo sistemas que chegam à produção.">
-<meta property="og:image" content="https://kaueprata.com/assets/og.jpg">
+<meta property="og:image" content="https://kaueprata.com/assets/og-v2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Kauê Prata, desenvolvedor backend e de dados">
@@ -28,7 +28,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Kauê Prata | Desenvolvedor Backend e Dados">
 <meta name="twitter:description" content="Desenvolvedor backend e de dados em São Paulo. Python, FastAPI, C e Lua. Estudante de Data Science &amp; IA no IBMEC, construindo sistemas que chegam à produção.">
-<meta name="twitter:image" content="https://kaueprata.com/assets/og.jpg">
+<meta name="twitter:image" content="https://kaueprata.com/assets/og-v2.jpg">
 
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
@@ -56,10 +56,8 @@
 }
 </script>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css">
+<link rel="preload" href="/assets/v2/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/v2/site.css">
 <noscript><style>[data-reveal]{opacity:1;transform:none}</style></noscript>
 </head>
 <body>
@@ -68,10 +66,13 @@
 
 <header class="topbar">
   <span class="brand">k.prata · sonder</span>
-  <div class="lang" role="group" aria-label="Idioma">
-    <span class="lang-btn is-active" aria-current="true">PT</span>
-    <span class="lang-sep" aria-hidden="true">/</span>
-    <a class="lang-btn" href="/" data-lang="en" hreflang="en" lang="en">EN</a>
+  <div class="topnav">
+    <a class="lab-link" href="https://lab.kaueprata.com/">laboratório ↗</a>
+    <div class="lang" role="group" aria-label="Idioma">
+      <span class="lang-btn is-active" aria-current="true">PT</span>
+      <span class="lang-sep" aria-hidden="true">/</span>
+      <a class="lang-btn" href="/" data-lang="en" hreflang="en" lang="en">EN</a>
+    </div>
   </div>
 </header>
 
@@ -84,6 +85,7 @@
       <h1 data-reveal>Kauê Prata</h1>
       <p class="hero-line" data-reveal>Backend, dados e sistemas que chegam à produção.</p>
       <p class="hero-meta" data-reveal>Data Science &amp; IA, IBMEC São Paulo · Python / FastAPI / C / Lua</p>
+      <a class="hero-cta" data-reveal href="#projetos">ver projetos <span aria-hidden="true">↓</span></a>
     </div>
   </section>
 
@@ -97,7 +99,8 @@
           <img src="/assets/profile.jpg" alt="Kauê Prata" width="200" height="200" loading="lazy" decoding="async">
         </picture>
         <div class="about-text">
-          <p class="about-body" data-reveal>Estudo Data Science &amp; IA no IBMEC São Paulo e trabalho como dev backend/full-stack. Escrevo Python, C e Lua; monto pipelines de vídeo com FFmpeg e rodo LLMs na minha própria infraestrutura. Prefiro sistemas que funcionam em produção a demos que prometem.</p>
+          <p class="about-body" data-reveal>Estudo Data Science &amp; IA no IBMEC São Paulo e trabalho como dev backend/full-stack. Gosto de problemas que atravessam a aplicação inteira — modelagem, API, interface e deploy — e de entender por que um sistema funciona quando deixa o ambiente de desenvolvimento. Prefiro software em produção a demos que prometem.</p>
+          <p class="sonder-note" data-reveal><strong>Sonder</strong> é a ideia de que cada pessoa carrega uma história tão complexa quanto a nossa — e o nome que acompanha meus projetos.</p>
           <p class="about-meta" data-reveal>2º período · São Paulo, BR</p>
         </div>
       </div>
@@ -109,77 +112,77 @@
     <div class="section-row">
       <h2 class="section-label" data-reveal>02&nbsp;&nbsp;projetos</h2>
       <div class="section-body projects">
-        <article class="project" data-reveal>
-          <div class="project-head">
-            <h3>Gestão de garantias FIDC</h3>
-            <span class="project-status">em produção</span>
+        <article class="case" data-reveal>
+          <div class="case-index"><span>case 01 · operação financeira</span><span class="project-status">em produção</span></div>
+          <div class="case-head"><h3>Gestão de garantias FIDC</h3></div>
+          <p class="case-lede">Uma aplicação full-stack para centralizar garantias e registros financeiros de uma operação de fundo de crédito, com rastreabilidade e controle de acesso desde a modelagem até o deploy.</p>
+          <dl class="case-facts">
+            <div class="case-fact"><dt>papel</dt><dd>Desenvolvimento full-stack</dd></div>
+            <div class="case-fact"><dt>desafio</dt><dd>Permissões e trilha de auditoria</dd></div>
+            <div class="case-fact"><dt>ambiente</dt><dd>Docker em VPS Linux</dd></div>
+          </dl>
+          <div class="architecture" role="img" aria-label="Arquitetura resumida: React se comunica com FastAPI, que persiste dados no PostgreSQL">
+            <div class="arch-node">React<small>interface operacional</small></div><span class="arch-arrow" aria-hidden="true">→</span>
+            <div class="arch-node">FastAPI<small>regras e permissões</small></div><span class="arch-arrow" aria-hidden="true">→</span>
+            <div class="arch-node">PostgreSQL<small>dados e auditoria</small></div>
           </div>
-          <p class="project-desc">Aplicação full-stack para controle de garantias e registros financeiros de uma operação de fundo de crédito. Permissões por papel, histórico de auditoria, deploy em VPS Linux.</p>
-          <div class="tags">
-            <span class="tag">FastAPI</span><span class="tag">SQLAlchemy async</span><span class="tag">PostgreSQL</span><span class="tag">React</span><span class="tag">Docker</span>
-          </div>
+          <p class="case-note">Sistema privado. A arquitetura foi resumida sem expor cliente, dados operacionais ou regras confidenciais.</p>
+          <div class="tags"><span class="tag">Python</span><span class="tag">SQLAlchemy async</span><span class="tag">React</span><span class="tag">Docker</span></div>
         </article>
-        <article class="project" data-reveal>
-          <div class="project-head">
-            <h3>Plataforma de Captação e Gestão de Cadastros</h3>
-            <span class="project-status">em produção</span>
+
+        <article class="case" data-reveal>
+          <div class="case-index"><span>case 02 · captação e dados</span><span class="project-status">em produção</span></div>
+          <div class="case-head"><h3>Plataforma de Captação e Gestão de Cadastros</h3></div>
+          <p class="case-lede">Fluxo público de cadastro conectado a um painel administrativo, desenhado para dezenas de milhares de registros com dados pessoais e operação compatível com a LGPD.</p>
+          <dl class="case-facts">
+            <div class="case-fact"><dt>entrega</dt><dd>Formulário e painel administrativo</dd></div>
+            <div class="case-fact"><dt>acesso</dt><dd>Magic link e allowlist</dd></div>
+            <div class="case-fact"><dt>operação</dt><dd>Analytics e proteção de dados</dd></div>
+          </dl>
+          <div class="architecture" role="img" aria-label="Arquitetura resumida: Cloudflare protege uma aplicação Next.js na Vercel, conectada ao PostgreSQL">
+            <div class="arch-node">Cloudflare<small>borda e proteção</small></div><span class="arch-arrow" aria-hidden="true">→</span>
+            <div class="arch-node">Next.js / Vercel<small>formulário e painel</small></div><span class="arch-arrow" aria-hidden="true">→</span>
+            <div class="arch-node">PostgreSQL<small>cadastros pessoais</small></div>
           </div>
-          <p class="project-desc">Aplicação Next.js com Postgres, publicada na Vercel atrás da Cloudflare. Formulário público de cadastro, painel administrativo com autenticação por magic link e allowlist, e analytics de visitas. Projetada para dezenas de milhares de registros com dados pessoais, tratados sob a LGPD.</p>
-          <div class="tags">
-            <span class="tag">Next.js</span><span class="tag">PostgreSQL</span><span class="tag">Vercel</span><span class="tag">Cloudflare</span><span class="tag">LGPD</span>
-          </div>
+          <p class="case-note">Produto privado. Código, telas e dados reais não são publicados; o recorte mostra apenas decisões técnicas de alto nível.</p>
+          <div class="tags"><span class="tag">Next.js</span><span class="tag">PostgreSQL</span><span class="tag">Vercel</span><span class="tag">LGPD</span></div>
         </article>
-        <article class="project" data-reveal>
-          <div class="project-head">
+
+        <div class="other-projects" data-reveal>
+          <h3 class="other-title">outros trabalhos</h3>
+          <article class="project-row">
             <h3>Content Engine</h3>
-          </div>
-          <p class="project-desc">Pipeline automatizado de produção de vídeo rodando inteiramente em infraestrutura local: geração de roteiro com LLM, TTS, alinhamento automático de legendas e renderização em FFmpeg, orquestrado por Redis.</p>
-          <div class="tags">
-            <span class="tag">Ollama</span><span class="tag">faster-whisper</span><span class="tag">FFmpeg</span><span class="tag">Redis</span><span class="tag">Python</span>
-          </div>
-        </article>
-        <article class="project" data-reveal>
-          <div class="project-head">
-            <h3>Scanner de alimentos (PWA)</h3>
-          </div>
-          <p class="project-desc">Leitura de código de barras com retorno de informação nutricional, backend em FastAPI sobre a Open Food Facts API.</p>
-          <div class="tags">
-            <span class="tag">FastAPI</span><span class="tag">PWA</span><span class="tag">Open Food Facts</span>
-          </div>
-        </article>
-        <article class="project" data-reveal>
-          <div class="project-head">
-            <h3>Jogo multiplayer em tempo real</h3>
-          </div>
-          <p class="project-desc">Projeto acadêmico em grupo: combate e habilidades em tempo real, sincronização de estado, unidades com IA, economia e progressão, gerador procedural de mapa.</p>
-          <div class="tags">
-            <span class="tag">Lua</span><span class="tag">Roblox Engine</span>
-          </div>
-        </article>
+            <p class="project-desc">Pipeline local de vídeo: roteiro com LLM, TTS, alinhamento de legendas e renderização em FFmpeg, orquestrados por Redis.</p>
+            <div class="tags"><span class="tag">Python</span><span class="tag">Ollama</span><span class="tag">FFmpeg</span></div>
+          </article>
+          <article class="project-row">
+            <h3>Scanner de alimentos</h3>
+            <p class="project-desc">PWA para leitura de código de barras e consulta nutricional sobre a API Open Food Facts.</p>
+            <div class="tags"><span class="tag">FastAPI</span><span class="tag">PWA</span></div>
+          </article>
+          <article class="project-row">
+            <h3>Multiplayer em tempo real</h3>
+            <p class="project-desc">Projeto acadêmico com sincronização de estado, combate, unidades com IA e geração procedural de mapa.</p>
+            <div class="tags"><span class="tag">Lua</span><span class="tag">Roblox</span></div>
+          </article>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- 04 stack -->
-  <section class="section" id="stack">
+  <!-- 04 laboratorio -->
+  <section class="section" id="laboratorio">
     <div class="section-row">
-      <h2 class="section-label" data-reveal>03&nbsp;&nbsp;stack</h2>
-      <div class="section-body stack">
-        <div data-reveal>
-          <h3>Linguagens</h3>
-          <ul><li>Python</li><li>C</li><li>Lua</li><li>SQL</li><li>JavaScript</li></ul>
-        </div>
-        <div data-reveal>
-          <h3>Backend</h3>
-          <ul><li>FastAPI</li><li>SQLAlchemy</li><li>PostgreSQL</li><li>Redis</li></ul>
-        </div>
-        <div data-reveal>
-          <h3>Frontend</h3>
-          <ul><li>React</li><li>Tailwind</li></ul>
-        </div>
-        <div data-reveal>
-          <h3>Infra &amp; Ferramentas</h3>
-          <ul><li>Docker</li><li>Linux/VPS</li><li>Git</li><li>FFmpeg</li></ul>
+      <h2 class="section-label" data-reveal>03&nbsp;&nbsp;laboratório</h2>
+      <div class="section-body">
+        <div class="lab-panel" data-reveal>
+          <p class="lab-kicker">// aprender construindo</p>
+          <h3>Projetos menores, funcionando de verdade.</h3>
+          <p>Exercícios de aula, jogos e experimentos vivem em um espaço separado — cada um com uma URL própria para abrir e testar no navegador.</p>
+          <div class="lab-actions">
+            <a class="text-link" href="https://lab.kaueprata.com/">visitar laboratório ↗</a>
+            <a class="text-link" href="https://lab.kaueprata.com/tabuada/">jogar Corrida da Tabuada ↗</a>
+          </div>
         </div>
       </div>
     </div>
@@ -205,9 +208,6 @@
   <p>© 2026 Kauê Prata · São Paulo, BR</p>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
-        integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
-<script src="/assets/site.js" defer></script>
+<script src="/assets/v2/site.js" defer></script>
 </body>
 </html>
