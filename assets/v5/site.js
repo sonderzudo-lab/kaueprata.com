@@ -116,13 +116,25 @@
     const styles = getComputedStyle(root);
     const accent = styles.getPropertyValue('--accent').trim() || '#1EC8E0';
     const points = styles.getPropertyValue('--hero-point').trim().split(',').map(Number);
-    return { accent, point: `rgb(${points.join(',')})`, accentRgb: styles.getPropertyValue('--accent-rgb').trim() };
+    const pointOpacity = Number.parseFloat(styles.getPropertyValue('--hero-point-opacity')) || 0.55;
+    const pointSize = Number.parseFloat(styles.getPropertyValue('--hero-point-size')) || 0.022;
+    return {
+      accent,
+      point: `rgb(${points.join(',')})`,
+      accentRgb: styles.getPropertyValue('--accent-rgb').trim(),
+      pointOpacity,
+      pointSize
+    };
   };
   let currentVisualColors = visualColors();
 
   const syncSceneColors = () => {
     currentVisualColors = visualColors();
-    if (material && window.THREE) material.color.set(currentVisualColors.point);
+    if (material && window.THREE) {
+      material.color.set(currentVisualColors.point);
+      material.size = currentVisualColors.pointSize;
+      material.opacity = currentVisualColors.pointOpacity;
+    }
     if (shader && window.THREE) shader.uniforms.uAccent.value.set(currentVisualColors.accent);
   };
 
@@ -330,9 +342,9 @@
     const colors = currentVisualColors;
     material = new THREE.PointsMaterial({
       color: colors.point,
-      size: 0.022,
+      size: colors.pointSize,
       transparent: true,
-      opacity: 0.55,
+      opacity: colors.pointOpacity,
       sizeAttenuation: true
     });
 
@@ -446,7 +458,7 @@ ${compiled.fragmentShader.replace(
 
       points.rotation.y = Math.sin(elapsed * 0.08) * 0.018;
       points.position.y = -1.4 - scrollAmount * 0.72;
-      material.opacity = 0.55 * (1 - scrollAmount * 0.68);
+      material.opacity = currentVisualColors.pointOpacity * (1 - scrollAmount * 0.68);
       mouseX += (targetX - mouseX) * 0.04;
       mouseY += (targetY - mouseY) * 0.04;
       camera.position.x = mouseX * 0.52;
