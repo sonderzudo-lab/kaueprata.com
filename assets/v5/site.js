@@ -3,6 +3,44 @@
 
   const $$ = (selector, context = document) => Array.from(context.querySelectorAll(selector));
 
+  const root = document.documentElement;
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+  const themeToggle = document.querySelector('[data-theme-toggle]');
+  const themeLabels = root.lang.toLowerCase().startsWith('pt')
+    ? { light: 'Ativar tema claro', dark: 'Ativar tema escuro' }
+    : { light: 'Switch to light theme', dark: 'Switch to dark theme' };
+
+  const syncThemeButton = () => {
+    if (!themeToggle) return;
+    const isLight = root.dataset.theme === 'light';
+    const label = isLight ? themeLabels.dark : themeLabels.light;
+    themeToggle.setAttribute('aria-label', label);
+    themeToggle.setAttribute('title', label);
+    themeToggle.setAttribute('aria-pressed', String(isLight));
+  };
+
+  const applyTheme = (theme, persist = true) => {
+    const isLight = theme === 'light';
+    root.classList.add('is-theme-changing');
+    if (isLight) root.dataset.theme = 'light';
+    else delete root.dataset.theme;
+    root.style.colorScheme = isLight ? 'light' : 'dark';
+    if (themeColor) themeColor.content = isLight ? '#F2EFE8' : '#0F1012';
+    if (persist) {
+      try { localStorage.setItem('kp-theme', isLight ? 'light' : 'dark'); } catch (error) {}
+    }
+    syncThemeButton();
+    window.dispatchEvent(new CustomEvent('kp-theme-change'));
+    window.setTimeout(() => root.classList.remove('is-theme-changing'), 400);
+  };
+
+  syncThemeButton();
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      applyTheme(root.dataset.theme === 'light' ? 'dark' : 'light');
+    });
+  }
+
   // Guarda o idioma escolhido para a raiz saber para onde enviar na próxima visita.
   $$('a.lang-btn').forEach((link) => {
     link.addEventListener('click', () => {
@@ -72,6 +110,21 @@
   let mobileResize = null;
   let mobileVisibility = null;
   let mobileObserver = null;
+  let shader = null;
+
+  const visualColors = () => {
+    const styles = getComputedStyle(root);
+    const accent = styles.getPropertyValue('--accent').trim() || '#1EC8E0';
+    const points = styles.getPropertyValue('--hero-point').trim().split(',').map(Number);
+    return { accent, point: `rgb(${points.join(',')})`, accentRgb: styles.getPropertyValue('--accent-rgb').trim() };
+  };
+  let currentVisualColors = visualColors();
+
+  const syncSceneColors = () => {
+    currentVisualColors = visualColors();
+    if (material && window.THREE) material.color.set(currentVisualColors.point);
+    if (shader && window.THREE) shader.uniforms.uAccent.value.set(currentVisualColors.accent);
+  };
 
   const loadThree = () => {
     if (window.THREE) return Promise.resolve(window.THREE);
@@ -117,6 +170,7 @@
     onResize = null;
     onVisibility = null;
     heroObserver = null;
+    shader = null;
   };
 
   const teardownMobilePulse = () => {
@@ -183,7 +237,7 @@
         const radius = index === 0 ? 2.2 : 0.7 + tail * 0.75;
 
         mobileContext.beginPath();
-        mobileContext.fillStyle = `rgba(30, 200, 224, ${opacity})`;
+        mobileContext.fillStyle = `rgba(${currentVisualColors.accentRgb}, ${opacity})`;
         mobileContext.arc(x, y, radius, 0, Math.PI * 2);
         mobileContext.fill();
       }
@@ -209,7 +263,7 @@
 
       mobileContext.save();
       mobileContext.globalAlpha = scrollFade;
-      mobileContext.shadowColor = 'rgba(30, 200, 224, .34)';
+      mobileContext.shadowColor = `rgba(${currentVisualColors.accentRgb}, .34)`;
       mobileContext.shadowBlur = 7;
       drawSignal(progress, signalStrength * 0.88);
       mobileContext.restore();
@@ -273,20 +327,21 @@
 
     geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const colors = currentVisualColors;
     material = new THREE.PointsMaterial({
-      color: 0x9a9a9e,
+      color: colors.point,
       size: 0.022,
       transparent: true,
       opacity: 0.55,
       sizeAttenuation: true
     });
 
-    let shader = null;
     material.onBeforeCompile = (compiled) => {
       compiled.uniforms.uTime = { value: 0 };
       compiled.uniforms.uPointer = { value: new THREE.Vector2(99, 99) };
       compiled.uniforms.uIntro = { value: 0 };
       compiled.uniforms.uScroll = { value: 0 };
+      compiled.uniforms.uAccent = { value: new THREE.Color(colors.accent) };
       compiled.vertexShader = `
 uniform float uTime;
 uniform float uIntro;
@@ -324,11 +379,12 @@ ${compiled.vertexShader.replace(
       compiled.fragmentShader = `
 varying float vEnergy;
 varying float vIntro;
+uniform vec3 uAccent;
 ${compiled.fragmentShader.replace(
         '#include <color_fragment>',
         `#include <color_fragment>
         float signal = smoothstep(0.08, 0.78, vEnergy);
-        diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.118, 0.784, 0.878), signal);
+        diffuseColor.rgb = mix(diffuseColor.rgb, uAccent, signal);
         diffuseColor.a *= vIntro * (0.74 + signal * 0.26);`
       )}`;
       shader = compiled;
@@ -422,6 +478,7 @@ ${compiled.fragmentShader.replace(
   };
 
   const syncScene = () => {
+    if (!document.getElementById('hero-canvas')) return;
     if (reduceMotion.matches) {
       teardownScene();
       teardownMobilePulse();
@@ -442,6 +499,7 @@ ${compiled.fragmentShader.replace(
   syncScene();
   desktop.addEventListener('change', syncScene);
   reduceMotion.addEventListener('change', syncScene);
+  window.addEventListener('kp-theme-change', syncSceneColors);
   window.addEventListener('pagehide', () => {
     teardownScene();
     teardownMobilePulse();
